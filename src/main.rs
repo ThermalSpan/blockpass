@@ -24,11 +24,11 @@ quick_main!(|| -> Result<()> {
 
     // For our use case, the first line MUST be the start deliminator
     input_reader.read_line(&mut line_buffer)?;   
-
     if chomp(&line_buffer) != args.start_deliminator {
         println!("{} vs {} : wat", chomp(&line_buffer), args.start_deliminator);
         bail!(ErrorKind::NoStartDeliminator);
     }
+    block_buffer.push_str(&line_buffer);
     
     // Now we iterate through the remaining lines
     // Until we hit the end deliminator
