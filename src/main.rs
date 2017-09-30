@@ -23,25 +23,25 @@ quick_main!(|| -> Result<()> {
     let mut line_buffer = String::new();
 
     // For our use case, the first line MUST be the start deliminator
-    input_reader.read_line(&mut line_buffer)?;   
+    input_reader.read_line(&mut line_buffer)?;
     if chomp(&line_buffer) != args.start_deliminator {
         println!("{} vs {} : wat", chomp(&line_buffer), args.start_deliminator);
         bail!(ErrorKind::NoStartDeliminator);
     }
-    block_buffer.push_str(&line_buffer);
-    
+
+    // We'll also keep the start delim unless told otherwise
+    if ! args.omit_start_delim {
+        block_buffer.push_str(&line_buffer);
+    }
+
     // Now we iterate through the remaining lines
     // Until we hit the end deliminator
     loop {
-        line_buffer.clear();    
+        line_buffer.clear();
         input_reader.read_line(&mut line_buffer)?;
-        
+
         //push that line into the block_buffer
         block_buffer.push_str(&line_buffer);
-
-        if args.verbose {
-            println!("Copied Line to block: {}", line_buffer);
-        }
 
         // If we see the end_delimnator we're done
         if chomp(&line_buffer) == args.end_deliminator {
@@ -62,10 +62,6 @@ quick_main!(|| -> Result<()> {
     fs::rename(&args.output, &original_output_path)
         .chain_err(|| format!("Unable to rename\n{}\nto\n{}", args.output.display(), original_output_path.display()))?;
 
-    if args.verbose {
-        println!("Renamed output file\n\t{}\n->\n\t{}", args.output.display(), original_output_path.display());
-    }
-    
     // No lets write out
     let mut output_file = File::create(&args.output)
         .chain_err(|| format!("Can't create ouput file: {}", args.input.display()))?;
@@ -75,6 +71,9 @@ quick_main!(|| -> Result<()> {
 
     // First write out the block
     output_file.write_all(block_buffer.as_bytes())?;
+
+    // This might be our use case specific, but we need a blank line following the YAML
+    write!(output_file, "\n")?;
 
     //No we need to copy contents of orig_file to output_file
     let mut output_buffer = String::new();

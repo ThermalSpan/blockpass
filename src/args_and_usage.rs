@@ -12,7 +12,7 @@ pub struct Args {
     pub input: PathBuf,
     pub output: PathBuf,
     pub keep_orig: bool,
-    pub verbose: bool,
+    pub omit_start_delim: bool,
     pub start_deliminator: String,
     pub end_deliminator: String,
 }
@@ -37,9 +37,9 @@ pub fn parse_args() -> Args {
         .arg(Arg::with_name("KEEP_ORIG")
             .help("Defualt behaivor is to delete original outout file")
             .long("keep-orig"))
-        .arg(Arg::with_name("VERBOSE")
-            .help("Print out extra info")
-            .long("verbose"))
+        .arg(Arg::with_name("OMIT_START_DELIM")
+            .help("Do not copy start deliminator to output")
+            .long("omit-start-delim"))
         .arg(Arg::with_name("START_DELIMINATOR")
             .help("The deliminator that starts the block")
             .long("start-delim")
@@ -60,7 +60,7 @@ pub fn parse_args() -> Args {
         input: input_path,
         output: output_path,
         keep_orig: args.is_present("KEEP_ORIG"),
-        verbose: args.is_present("VERBOSE"),
+        omit_start_delim: args.is_present("OMIT_START_DELIM"),
         start_deliminator: String::from(args.value_of("START_DELIMINATOR").unwrap()),
         end_deliminator: String::from(args.value_of("END_DELIMINATOR").unwrap()),
     }
