@@ -2,7 +2,7 @@ use clap::{Arg, App};
 use std::path::PathBuf;
 
 // Programmer defined constants
-static PROGRAM_NAME: &'static str = "yuga";
+static PROGRAM_NAME: &'static str = "blockpass";
 
 // Derived constants
 static VERSION: &'static str = env!("CARGO_PKG_VERSION");

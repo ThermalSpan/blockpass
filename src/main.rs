@@ -12,6 +12,7 @@ use std::io::{BufRead, BufReader};
 quick_main!(|| -> Result<()> {
     let args = parse_args();
 
+    // We need a reader for the input file
     let input_file = File::open(&args.input)
         .chain_err(|| format!("Can't open input file: {}", args.input.display()))?;
     let mut input_reader = BufReader::new(input_file);
@@ -62,7 +63,7 @@ quick_main!(|| -> Result<()> {
     fs::rename(&args.output, &original_output_path)
         .chain_err(|| format!("Unable to rename\n{}\nto\n{}", args.output.display(), original_output_path.display()))?;
 
-    // No lets write out
+    // Now lets write out the original file
     let mut output_file = File::create(&args.output)
         .chain_err(|| format!("Can't create ouput file: {}", args.input.display()))?;
 
