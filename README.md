@@ -1,6 +1,6 @@
 # blockpass
 
-## What does it do
+### What does it do
 This tool takes an input file, and its looks for deliminated block at the top of that file (usually YAML) and then will append that to the output file. 
 
 ### Why 
